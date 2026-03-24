@@ -1,0 +1,14 @@
+name: "🇺🇿 O'zbek"
+lang_detected: "Sizning tilingiz O'zbekcha deb aniqlandi. Shu tilni tanlaysizmi?"
+select_detected_lang: "✅ Ha"
+select_other_lang: "🌐 Boshqa tilni tanlash"
+welcome: >
+  Salom {first_name}!
+  Bu yerda imtihon uchun kerakli materiallarni topishingiz mumkin: testlar, savollar va lug'atlar.
+  Reytingli testlarda qatnashib faollar jadvalida eng yuqori bo'ling
+  Bu yerdagi hamma materiallar "odamlardan odamlarga" ko'rinishida. Ya'ni istagan odam o'zining materiallarini yuklashi mumkin
+start: "🔄️ Bot muvaffaqiyatli yangilandi"
+joint_test: "📝 Testga qo'shilish"
+question_bank: "🏦 Savollar banki"
+vocabulary: "📚 So'z yodlash"
+leaderboard: "🏆 Faollar"
