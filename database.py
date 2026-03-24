@@ -50,6 +50,10 @@ class Database(Postgres):
 
         return bool(result)
 
+    async def change_lang(self, user_id: int, lang: str) -> None:
+        sql = "UPDATE users SET lang = $2 WHERE user_id = $1"
+        await self.execute(sql, user_id, lang, execute=True)
+
     async def lang(self, user_id: int) -> str:
         sql = "SELECT lang FROM users WHERE user_id = $1"
         return await self.execute(sql, user_id, fetch_val=True)

@@ -4,6 +4,7 @@ from aiogram.types import Message, CallbackQuery
 
 from database import db
 from keyboards.inline import auto_detected_lang, lang_menu
+from keyboards.reply import start_keyboard
 from utils.gettext import locales, _
 
 router = Router()
@@ -23,7 +24,7 @@ async def start(message: Message):
 
     else:
         lang = await db.lang(user_id)
-        await message.answer(_("start", lang))
+        await message.answer(_("start", lang), reply_markup=start_keyboard(lang))
 
 
 @router.callback_query(F.data.startswith("lang"))
@@ -36,6 +37,13 @@ async def lang(callback: CallbackQuery):
                                          reply_markup=lang_menu())
     else:
         if await db.check_user(user_id):
-            pass
+            await db.change_lang(user_id, data)
+            await callback.message.delete()
+            await callback.message.answer(_("lang_changed", data),
+                                             reply_markup=start_keyboard(data))
         else:
             await db.add_user(user_id, data)
+            await callback.message.delete()
+            await callback.message.answer(_("welcome", data).format(
+                first_name=callback.from_user.first_name
+            ), reply_markup=start_keyboard(data))

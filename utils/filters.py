@@ -1,0 +1,13 @@
+from aiogram.filters import BaseFilter
+from aiogram.types import Message
+
+from database import db
+from utils.gettext import _
+
+class Text(BaseFilter):
+    def __init__(self, key: str) -> None:
+        self.key = key
+
+    async def __call__(self, message: Message) -> bool:
+        lang = await db.lang(message.from_user.id)
+        return message.text == _(self.key, lang)

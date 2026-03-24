@@ -1,5 +1,6 @@
-from handlers import commands
+from handlers import commands, change_lang
 
 routers_list = [
-    commands.router
+    commands.router,
+    change_lang.router
 ]

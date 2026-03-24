@@ -2,13 +2,17 @@ name: "🇺🇸 English"
 lang_detected: "Your language has been detected as English. Would you like to select this language?"
 select_detected_lang: "✅ Yes"
 select_other_lang: "🌐 Choose another language"
+lang_changed: "Successfully changed"
 welcome: >
   Hello {first_name}!
-  Here you can find useful preparation materials: tests, questions and vocabularies.
+  Here you can find useful preparation materials: tests, questions and vocabularies
   Participate in rated tests and be the highest in leaderboard
   All materials here are "from people to people". That is, anyone can upload their own materials
 start: "🔄️ Bot successfully updated"
-joint_test: "📝 Join test"
+join_test: "📝 Join test"
 question_bank: "🏦 Question bank"
 vocabulary: "📚 Vocabulary"
 leaderboard: "🏆 Leaderboard"
+profile: "👤 Profile"
+change_lang: "🌐 Change language"
+
