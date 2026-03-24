@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
+from pyexpat.errors import messages
 
 from database import db
 from keyboards.inline import auto_detected_lang, lang_menu
@@ -42,7 +43,7 @@ async def lang(callback: CallbackQuery):
             await callback.message.answer(_("lang_changed", data),
                                              reply_markup=start_keyboard(data))
         else:
-            await db.add_user(user_id, data)
+            await db.add_user(callback.from_user.full_name, user_id, data)
             await callback.message.delete()
             await callback.message.answer(_("welcome", data).format(
                 first_name=callback.from_user.first_name

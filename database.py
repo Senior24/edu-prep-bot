@@ -40,15 +40,19 @@ class Postgres:
 
 
 class Database(Postgres):
-    async def add_user(self, user_id: int, lang: str) -> None:
-        sql = "INSERT INTO users (user_id, lang) VALUES ($1 , $2)"
-        await self.execute(sql, user_id, lang, execute=True)
+    async def add_user(self, name: str, user_id: int, lang: str) -> None:
+        sql = "INSERT INTO users (name, user_id, lang) VALUES ($1 , $2, $3)"
+        await self.execute(sql, name, user_id, lang, execute=True)
 
     async def check_user(self, user_id: int) -> bool:
         sql = "SELECT * FROM users WHERE user_id = $1"
         result = await self.execute(sql, user_id, fetch_val=True)
 
         return bool(result)
+
+    async def leaderboard(self):
+        sql = "SELECT name, rating FROM users ORDER BY RATING DESC LIMIT 50"
+        return await self.execute(sql, fetch=True)
 
     async def change_lang(self, user_id: int, lang: str) -> None:
         sql = "UPDATE users SET lang = $2 WHERE user_id = $1"
