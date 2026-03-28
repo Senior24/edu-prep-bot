@@ -17,3 +17,9 @@ def lang_menu() -> InlineKeyboardMarkup:
 
     builder.adjust(1)
     return builder.as_markup()
+
+def yes_no(lang: str, prefix: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=_("yes", lang), callback_data=prefix+"yes"),
+         InlineKeyboardButton(text=_("no", lang), callback_data=prefix+"no")]
+    ])

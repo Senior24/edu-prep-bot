@@ -11,6 +11,28 @@ welcome: >
 start: "🔄️ Bot muvaffaqiyatli yangilandi"
 main_menu: "🔝 Bosh menyu"
 tests_menu: "📄 Testlar menyusi"
+test_name: "Test nomini kiriting"
+invalid_test_name: "Test nomi faqat matndan iborat bo'lishi kerak"
+send_test_file: "Test savollarini yagona fayl yoki rasm ko'rinishida yuboring"
+test_description_detected: "Siz yuborgan fayl/rasm tavsifini test haqida ma'lumot ko'rinishida qo'llashni hohlaysizmi?"
+enter_test_description: "Test haqidagi ma'lumotni kiriting"
+invalid_test_description: "Test haqida ma'lumot faqat matndan iborat bo'lishi kerak"
+enter_test_timestamp: |
+  Test sanasi va vaqtini kiriting
+  Format: <code>kk.oo.yyyy ss:dd</code>
+enter_test_duration: |
+  Test davomiyligini kiriting
+  Format: <code>ss:dd</code>
+enter_test_answers: |
+  Test javoblarini kiritng
+  Format:
+  1. a
+  2. b
+  3. 48
+  4. 12.8
+invalid_test_answers: "Quyidagi javoblarda format xatoligi aniqlandi"
+invalid_format: "Noto'g'ri format"
+canceled: "Bekor qilindi"
 tests: "📝 Testlar"
 question_bank: "🏦 Savollar banki"
 vocabulary: "📚 So'z yodlash"
@@ -20,4 +42,7 @@ change_lang: "🌐 Tilni o'zgartirish"
 host_test: "➕ Test o'tkazish"
 join_test: "➡️ Testga qo'shilish"
 previous_results: "📄 Oldingi natijalar"
+yes: "✅ Ha"
+no: "❌ Yo'q"
+cancel: "🚫 Bekor qilish"
 back: "🔙 Ortga qaytish"

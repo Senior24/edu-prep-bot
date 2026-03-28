@@ -1,8 +1,9 @@
-from typing import Union
-
 import asyncpg
+
 from asyncpg import Connection
 from asyncpg.pool import Pool
+
+from typing import Union
 
 from data.config import DB_USER, DB_PASS, DB_HOST, DB_NAME
 
@@ -60,6 +61,10 @@ class Database(Postgres):
 
     async def lang(self, user_id: int) -> str:
         sql = "SELECT lang FROM users WHERE user_id = $1"
+        return await self.execute(sql, user_id, fetch_val=True)
+
+    async def check_verification(self, user_id: int) -> bool:
+        sql = "SELECT verified FROM users WHERE user_id = $1"
         return await self.execute(sql, user_id, fetch_val=True)
 
 db = Database()

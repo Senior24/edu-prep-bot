@@ -1,10 +1,17 @@
-from aiogram import Router
-from aiogram.types import Message
+from aiogram import Router, F
+from aiogram.filters import StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.types import Message, CallbackQuery
+
+from datetime import datetime
 
 from database import db
-from keyboards.reply import tests_keyboard
+from keyboards.inline import yes_no
+from keyboards.reply import tests_keyboard, cancel_button
+from utils.answers import validate_answers
 from utils.filters import Text
 from utils.gettext import _
+from utils.states import HostTest
 
 router = Router()
 
@@ -12,3 +19,129 @@ router = Router()
 async def tests(message: Message):
     lang = await db.lang(message.from_user.id)
     await message.answer(_("tests_menu", lang), reply_markup=tests_keyboard(lang))
+
+
+@router.message(Text("host_test"))
+async def host_test(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+
+    await state.set_state(HostTest.name)
+    await message.answer(_("test_name", lang), reply_markup=cancel_button(lang))
+
+
+@router.message(StateFilter(HostTest), Text("cancel"))
+async def cancel(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+
+    await state.clear()
+    await message.answer(_("canceled", lang),
+                         reply_markup=tests_keyboard(lang))
+
+
+@router.message(HostTest.name, F.text)
+async def set_name(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+
+    await state.update_data(name=message.text)
+    await state.set_state(HostTest.file)
+
+    await message.answer(_("send_test_file", lang))
+
+
+@router.message(HostTest.name, ~F.text)
+async def invalid_name(message: Message):
+    lang = await db.lang(message.from_user.id)
+    await message.answer(_("invalid_test_name", lang))
+
+
+@router.message(HostTest.file, F.photo | F.document)
+async def test_file(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+
+    if message.document:
+        await state.update_data(file_id=message.document.file_id,
+                                content_type="document")
+    if message.photo:
+        await state.update_data(file_id=message.photo[-1].file_id,
+                                content_type="photo")
+
+    if message.caption:
+        await state.update_data(description=message.caption)
+
+        await message.answer(_("test_description_detected", lang),
+                             reply_markup=yes_no(lang, "description_"))
+
+    else:
+        await state.set_state(HostTest.description)
+        await message.answer(_("enter_test_description", lang))
+
+
+@router.callback_query(HostTest.file, F.data.startswith("description"))
+async def handle_callback(callback: CallbackQuery, state: FSMContext):
+    lang = await db.lang(callback.from_user.id)
+    decision = callback.data.split("_")[1]
+
+    if decision == "yes":
+        await state.set_state(HostTest.time)
+        await callback.message.answer(_("enter_test_timestamp", lang))
+    else:
+        await state.set_state(HostTest.description)
+        await callback.message.answer(_("enter_test_description", lang))
+
+
+@router.message(HostTest.description, F.text)
+async def test_description(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+
+    await state.update_data(description=message.caption)
+    await state.set_state(HostTest.time)
+
+    await message.answer(_("enter_test_timestamp", lang))
+
+
+@router.message(HostTest.description, ~F.text)
+async def invalid_description(message: Message):
+    lang = await db.lang(message.from_user.id)
+    await message.answer("invalid_test_description", lang)
+
+
+@router.message(HostTest.time, F.text)
+async def check_timestamp(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+    time = datetime.strptime(message.text, "%d.%m.%Y %H:%M")
+
+    await state.update_data(time=time)
+    await state.set_state(HostTest.duration)
+    await message.answer(_("enter_test_duration", lang))
+
+
+@router.message(HostTest.duration, F.text)
+async def check_duration(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+    duration = datetime.strptime(message.text, "%H:%M")
+
+    await state.update_data(duration=duration)
+    await state.set_state(HostTest.answers)
+    await message.answer(_("enter_test_answers", lang))
+
+
+@router.message(HostTest.answers, F.text)
+async def check_answers(message: Message, state: FSMContext):
+    lang = await db.lang(message.from_user.id)
+    result = validate_answers(message.text)
+
+    if result[1]:
+        result[1].insert(0, _("invalid_test_answers", lang))
+        await message.answer("\n".join(result[1]))
+    else:
+        await state.update_data(answers=result[0])
+        print(await state.get_data())
+        print(await state.get_state())
+        await state.clear()
+
+
+@router.message(HostTest.file, ~F.document)
+@router.message(StateFilter(HostTest.time, HostTest.duration, HostTest.answers), ~F.text)
+async def invalid(message: Message):
+    lang = await db.lang(message.from_user.id)
+    await message.answer(_("invalid_format", lang))
