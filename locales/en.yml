@@ -9,10 +9,15 @@ welcome: >
   Participate in rated tests and be the highest in leaderboard
   All materials here are "from people to people". That is, anyone can upload their own materials
 start: "🔄️ Bot successfully updated"
-join_test: "📝 Join test"
+main_menu: "🔝 Main menu"
+tests_menu: "📄 Tests menu"
+tests: "📝 Tests"
 question_bank: "🏦 Question bank"
 vocabulary: "📚 Vocabulary"
 leaderboard: "🏆 Leaderboard"
 profile: "👤 Profile"
 change_lang: "🌐 Change language"
-
+host_test: "➕ Host a test"
+join_test: "➡️ Join the test"
+previous_results: "📄 Previous results"
+back: "🔙 Go back"

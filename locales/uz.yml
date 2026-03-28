@@ -9,9 +9,15 @@ welcome: >
   Reytingli testlarda qatnashib faollar jadvalida eng yuqori bo'ling
   Bu yerdagi hamma materiallar "odamlardan odamlarga" ko'rinishida. Ya'ni istagan odam o'zining materiallarini yuklashi mumkin
 start: "🔄️ Bot muvaffaqiyatli yangilandi"
-join_test: "📝 Testga qo'shilish"
+main_menu: "🔝 Bosh menyu"
+tests_menu: "📄 Testlar menyusi"
+tests: "📝 Testlar"
 question_bank: "🏦 Savollar banki"
 vocabulary: "📚 So'z yodlash"
 leaderboard: "🏆 Faollar"
 profile: "👤 Profil"
 change_lang: "🌐 Tilni o'zgartirish"
+host_test: "➕ Test o'tkazish"
+join_test: "➡️ Testga qo'shilish"
+previous_results: "📄 Oldingi natijalar"
+back: "🔙 Ortga qaytish"

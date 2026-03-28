@@ -1,11 +1,11 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
-from pyexpat.errors import messages
 
 from database import db
 from keyboards.inline import auto_detected_lang, lang_menu
 from keyboards.reply import start_keyboard
+from utils.filters import Text
 from utils.gettext import locales, _
 
 router = Router()
@@ -29,7 +29,7 @@ async def start(message: Message):
 
 
 @router.callback_query(F.data.startswith("lang"))
-async def lang(callback: CallbackQuery):
+async def set_lang(callback: CallbackQuery):
     user_id = callback.from_user.id
     data = callback.data.split("_")[1]
 
@@ -48,3 +48,9 @@ async def lang(callback: CallbackQuery):
             await callback.message.answer(_("welcome", data).format(
                 first_name=callback.from_user.first_name
             ), reply_markup=start_keyboard(data))
+
+
+@router.message(Text("back"))
+async def back(message: Message):
+    lang = await db.lang(message.from_user.id)
+    await message.answer(_("main_menu", lang), reply_markup=start_keyboard(lang))
