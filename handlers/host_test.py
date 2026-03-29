@@ -159,6 +159,6 @@ async def invalid(message: Message, state: FSMContext):
     if current_state == HostTest.name:
         await message.answer(_("invalid_test_name", lang))
     elif current_state == HostTest.description:
-        await message.answer("invalid_test_description", lang)
+        await message.answer(_("invalid_test_description", lang))
     else:
         await message.answer(_("invalid_format", lang))
