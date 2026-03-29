@@ -2,7 +2,9 @@ import asyncpg
 
 from asyncpg import Connection
 from asyncpg.pool import Pool
+from asyncpg.protocol.record import Record
 
+from datetime import datetime
 from typing import Union
 
 from data.config import DB_USER, DB_PASS, DB_HOST, DB_NAME
@@ -51,7 +53,26 @@ class Database(Postgres):
 
         return bool(result)
 
-    async def leaderboard(self):
+    async def add_test(self,
+                       name: str,
+                       file_id: str,
+                       content_type: str,
+                       description: str,
+                       start_time: datetime,
+                       end_time: datetime,
+                       answers: list[str]
+                       ) -> None:
+        sql = ("INSERT INTO "
+               "tests (name, file_id, content_type, description,start_time, end_time, answers)"
+               "VALUES ($1, $2, $3, $4, $5, $6, $7)")
+
+        await self.execute(sql, name,
+                           file_id, content_type,
+                           description, start_time,
+                           end_time, answers,
+                           execute=True)
+
+    async def leaderboard(self) -> list[Record]:
         sql = "SELECT name, rating FROM users ORDER BY RATING DESC LIMIT 50"
         return await self.execute(sql, fetch=True)
 
