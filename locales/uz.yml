@@ -20,9 +20,11 @@ invalid_test_description: "Test haqida ma'lumot faqat matndan iborat bo'lishi ke
 enter_test_timestamp: |
   Test sanasi va vaqtini kiriting
   Format: <code>kk.oo.yyyy ss:dd</code>
+invalid_test_time: "Test vaqti hozirgi vaqtdan oldin bo'lishi mumkin emas"
 enter_test_duration: |
   Test davomiyligini kiriting
   Format: <code>ss:dd</code>
+invalid_test_duration: "Test uzog'i 48 soat davom etishi mumkin"
 enter_test_answers: |
   Test javoblarini kiritng
   Format:

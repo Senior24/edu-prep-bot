@@ -75,14 +75,14 @@ async def handle_callback(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer(_("enter_test_timestamp", lang))
     else:
         await state.set_state(HostTest.description)
-        await callback.message.answer(_("enter_test_description", lang))
+        await callback.message.edit_text(_("enter_test_description", lang))
 
 
 @router.message(HostTest.description, F.text)
 async def test_description(message: Message, state: FSMContext):
     lang = await db.lang(message.from_user.id)
 
-    await state.update_data(description=message.caption)
+    await state.update_data(description=message.text)
     await state.set_state(HostTest.time)
 
     await message.answer(_("enter_test_timestamp", lang))
@@ -94,6 +94,9 @@ async def check_timestamp(message: Message, state: FSMContext):
 
     try:
         time = datetime.strptime(message.text, "%d.%m.%Y %H:%M")
+        if time < datetime.now():
+            await message.answer(_("invalid_test_time", lang))
+            return
     except ValueError:
         await message.answer(_("invalid_format", lang))
         return
@@ -108,7 +111,11 @@ async def check_duration(message: Message, state: FSMContext):
     lang = await db.lang(message.from_user.id)
 
     try:
-        duration = datetime.strptime(message.text, "%H:%M")
+        hours, minutes = map(int, message.text.split(":"))
+        duration = timedelta(hours=hours, minutes=minutes)
+        if duration > timedelta(hours=48):
+            await message.answer(_("invalid_test_duration", lang))
+            return
     except ValueError:
         await message.answer(_("invalid_format", lang))
         return
@@ -134,8 +141,7 @@ async def check_answers(message: Message, state: FSMContext):
                           content_type=data['content_type'],
                           description=data['description'],
                           start_time=data['time'],
-                          end_time=data['time'] + timedelta(hours=data['duration'].hour,
-                                                            minutes=data['duration'].minute),
+                          duration=data['duration'],
                           answers=result[0])
 
         await message.answer(_("test_added", lang),

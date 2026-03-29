@@ -4,7 +4,7 @@ from asyncpg import Connection
 from asyncpg.pool import Pool
 from asyncpg.protocol.record import Record
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Union
 
 from data.config import DB_USER, DB_PASS, DB_HOST, DB_NAME
@@ -59,21 +59,21 @@ class Database(Postgres):
                        content_type: str,
                        description: str,
                        start_time: datetime,
-                       end_time: datetime,
+                       duration: timedelta,
                        answers: list[str]
                        ) -> None:
         sql = ("INSERT INTO "
-               "tests (name, file_id, content_type, description,start_time, end_time, answers)"
-               "VALUES ($1, $2, $3, $4, $5, $6, $7)")
+               "tests (rated, name, file_id, content_type, description, start_time, duration, answers)"
+               "VALUES ($1, $2, $3, $4, $5, $6, $7, $8)")
 
-        await self.execute(sql, name,
-                           file_id, content_type,
-                           description, start_time,
-                           end_time, answers,
-                           execute=True)
+        await self.execute(sql, False,
+                           name, file_id,
+                           content_type, description,
+                           start_time, duration,
+                           answers, execute=True)
 
     async def leaderboard(self) -> list[Record]:
-        sql = "SELECT name, rating FROM users ORDER BY RATING DESC LIMIT 50"
+        sql = "SELECT name, rating FROM users ORDER BY RATING DESC LIMIT 20"
         return await self.execute(sql, fetch=True)
 
     async def change_lang(self, user_id: int, lang: str) -> None:
