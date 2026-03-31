@@ -76,6 +76,10 @@ class Database(Postgres):
         sql = "SELECT name, rating FROM users ORDER BY RATING DESC LIMIT 20"
         return await self.execute(sql, fetch=True)
 
+    async def get_rating(self, user_id: int) -> int:
+        sql = "SELECT rating FROM users WHERE user_id = $1"
+        return await self.execute(sql, user_id, fetch_val=True)
+
     async def change_lang(self, user_id: int, lang: str) -> None:
         sql = "UPDATE users SET lang = $2 WHERE user_id = $1"
         await self.execute(sql, user_id, lang, execute=True)
@@ -84,7 +88,7 @@ class Database(Postgres):
         sql = "SELECT lang FROM users WHERE user_id = $1"
         return await self.execute(sql, user_id, fetch_val=True)
 
-    async def check_verification(self, user_id: int) -> bool:
+    async def is_verified(self, user_id: int) -> bool:
         sql = "SELECT verified FROM users WHERE user_id = $1"
         return await self.execute(sql, user_id, fetch_val=True)
 

@@ -35,6 +35,14 @@ enter_test_answers: |
 invalid_test_answers: "Quyidagi javoblarda format xatoligi aniqlandi"
 test_added: "Test muvaffaqiyatli qo'shildi"
 invalid_format: "Noto'g'ri format"
+profile_info: |
+  Ism: {name}
+  ID: {user_id}
+  Reyting: {rating}
+
+  {verified}
+verified_user: "Tasdiqlangan"
+not_verified_user: "Tasdiqlanmagan"
 canceled: "Bekor qilindi"
 tests: "📝 Testlar"
 question_bank: "🏦 Savollar banki"
