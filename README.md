@@ -1,5 +1,5 @@
 # Edu Prep Bot
-![image](image.webp)
+![image](image.png)
 This bot helps you study by providing community study materials (Videos, images, files, and flashcrads). Add your content, so others can use it too
 
 🏆 Participate in rated tests to be in the top of the leaderboard
